@@ -1,0 +1,16 @@
+# .clinerules - Instructions for Cline on Stable-Diffusion-WebUI Obfuscation Project
+
+project:
+  name: "Stable-Diffusion-WebUI Obfuscation System"
+  target_framework: "Python / Automatic1111 / PyTorch / Gradio"
+
+core_rules:
+  - "Never use naive raw file rewriting with exec() that breaks relative imports (e.g., 'from .module import ...'). All wrapped files must resolve through a custom sys.meta_path loader or import hook."
+  - "Always preserve module metadata (__file__, __name__, __package__, __path__) during runtime decoding so that absolute and relative path resolutions in modules/paths.py and modules/shared.py remain intact."
+  - "Recursively scan and transform all target directories: /modules/, /scripts/, /repositories/, /extensions/, /extensions-builtin/, and root .py entry points."
+  - "Ensure absolute safety against self-recursion: the obfuscation script and runtime loader files must be explicitly excluded from being encoded into themselves."
+  - "Test code compatibility against Python 3.10+ import machinery and ensure multi-threaded safety for background extension loading (like ADetailer and LyCORIS)."
+
+coding_standards:
+  - "Write clean, modular, well-commented Python scripts with proper exception handling for file IO and base64 parsing."
+  - "Do not alter or strip out essential docstrings or function signatures required by Automatic1111 reflection and script loading hooks (script_loading.py)."
